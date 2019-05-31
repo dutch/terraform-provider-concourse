@@ -21,6 +21,7 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
+			"concourse_team": resourceTeam(),
 			"concourse_pipeline": resourcePipeline(),
 		},
 
