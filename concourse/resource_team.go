@@ -30,13 +30,21 @@ func resourceTeamRead(d *schema.ResourceData, m interface{}) error {
 	client := *m.(*CombinedConfig).client
 	name := d.Get("name").(string)
 
-	proxy := client.Team(name)
-	team, _, err := proxy.Team(name)
+	teams, err := client.ListTeams()
 	if err != nil {
 		return fmt.Errorf("read error: %s", err)
 	}
 
-	d.Set("name", team.Name)
+	var foundTeam *atc.Team
+
+	for _, team := range teams {
+		if team.Name == name {
+			foundTeam = &team
+			break
+		}
+	}
+
+	d.Set("name", foundTeam.Name)
 
 	return nil
 }
